@@ -1,0 +1,33 @@
+class Solution:
+    def minFallingPathSum(self, matrix: List[List[int]]) -> int:
+        matrix_size = len(matrix)
+
+        # Helper function to check if a coordinate is within the matrix bounds
+        def is_in_bound(x, y):
+            return 0 <= x < matrix_size and 0 <= y < matrix_size
+
+        for row in range(matrix_size - 1, -1, -1):
+            for col in range(matrix_size - 1, -1, -1):
+                # Initialize choices with infinity
+                choice1, choice2, choice3 = float('inf'), float('inf'), float('inf')
+
+                # Check if left diagonal element exists and update choice1
+                if is_in_bound(row + 1, col - 1):
+                    choice1 = matrix[row + 1][col - 1]
+
+                # Check if element directly below exists and update choice2
+                if is_in_bound(row + 1, col):
+                    choice2 = matrix[row + 1][col]
+
+                # Check if right diagonal element exists and update choice3
+                if is_in_bound(row + 1, col + 1):
+                    choice3 = matrix[row + 1][col + 1]
+
+                # Choose the minimum among available choices
+                min_choice = min(choice1, choice2, choice3)
+
+                # Update the current element with the minimum choice
+                if min_choice != float('inf'):
+                    matrix[row][col] += min_choice
+
+        return min(matrix[0])
